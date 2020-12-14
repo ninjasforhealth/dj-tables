@@ -1,0 +1,79 @@
+{% load dj_tables %}
+
+<table class="table">
+    <thead>
+        <tr>
+            {% if subtables %}
+                <th style="width: 1%; white-space: nowrap;"></th>
+            {% endif %}
+            {% for header in tableheaders %}
+                <th{% if header.container_classname %} class="{{ header.container_classname }}"{% endif %}>
+                    {% with attr=header|get_item:'attr' text=header|get_item:'text' %}
+                        {% if attr and header|get_item:'sortable' %}
+                            {% table_sortlink attr=attr text=text %}
+                        {% else %}
+                            {{ text }}
+                        {% endif %}
+                    {% endwith %}
+                </th>
+            {% endfor %}
+            {% if tablerowactions %}
+                <th class="text-right">Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for tablerow in tabledata %}
+            <tr>
+                {% if subtables %}
+                    <td>
+                        <a class="collapsed" data-toggle="collapse" href="#subtables{{ tableid }}-{{ forloop.counter }}">
+                            <span data-toggle="tooltip" title="{{ subtabletoggletext }}">
+                                <i class="fa"></i>
+                            </span>
+                        </a>
+                    </td>
+                {% endif %}
+                {% for header in tableheaders %}
+                    <td{% if header.container_classname %} class="{{ header.container_classname }}"{% endif %}>
+                        {% if header.key %}
+                            {% with key=header|get_item:'key' %}
+                                {{ tablerow|get_attr_or_item:key }}
+                            {% endwith %}
+                        {% else %}
+                            {% render header.nodelist header.render_context %}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                {% if tablerowactions %}
+                    <td class="text-right">
+                        {% for tablerowaction in tablerowactions %}
+                            <a class="text-decoration-none ml-2" href="{% tablerowaction_url tablerow tablerowaction|get_item:'view' tablerowaction|get_item:'args' %}{% if tablerowaction.addnextparam %}?next={{ request.get_full_path|urlencode }}{% endif %}">
+                                <span data-toggle="tooltip" title="{{ tablerowaction|get_item:'text' }}">
+                                    <i class="{{ tablerowaction|get_item:'classname' }}"></i>
+                                </span>
+                            </a>
+                        {% endfor %}
+                    </td>
+                {% endif %}
+            </tr>
+            {% if subtables %}
+            <tr>
+                <td class="p-0 border-0" colspan="{{ tablecolspan }}">
+                    <div class="collapse p-4{% if collapseclass %} {{ collapseclass }}{% endif %}" id="subtables{{ tableid }}-{{ forloop.counter }}">
+                        {% for subtable in subtables %}
+                            {% render subtable.nodelist subtable.render_context %}
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        {% empty %}
+            <tr>
+                <td colspan="{{ tablecolspan }}">
+                    No data to display.
+                </td>
+            </tr>
+        {% endfor %} 
+    </tbody>
+</table>

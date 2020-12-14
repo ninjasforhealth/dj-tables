@@ -1,0 +1,7 @@
+site_name: dj-tables
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Template Tags: template-tags.md
+theme: readthedocs

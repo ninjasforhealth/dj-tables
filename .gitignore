@@ -1,0 +1,9 @@
+.tox
+dj_tables.egg-info
+*.pyc
+__pycache__
+build
+dist
+venv
+env
+site

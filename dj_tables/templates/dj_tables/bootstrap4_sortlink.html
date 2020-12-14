@@ -1,0 +1,6 @@
+<a style="color: inherit!important;" href="{{ url }}">
+    {{ text }}
+    {% if ordering %}
+    <i class="ml-1 fa fa-caret-{% if ordering == 'asc' %}up{% else %}down{% endif %}"></i>
+    {% endif %}
+</a>
