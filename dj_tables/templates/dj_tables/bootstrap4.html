@@ -8,9 +8,9 @@
             {% endif %}
             {% for header in tableheaders %}
                 <th{% if header.container_classname %} class="{{ header.container_classname }}"{% endif %}>
-                    {% with attr=header|get_item:'attr' text=header|get_item:'text' %}
-                        {% if attr and header|get_item:'sortable' %}
-                            {% table_sortlink attr=attr text=text %}
+                    {% with key=header|get_item:'key' text=header|get_item:'text' %}
+                        {% if key and header|get_item:'sortable' %}
+                            {% table_sortlink key=key text=text %}
                         {% else %}
                             {{ text }}
                         {% endif %}

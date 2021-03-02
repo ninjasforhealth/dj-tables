@@ -51,21 +51,21 @@ class TableSortLinkNode(Node):
         bits = token.split_contents()[1:]
         self.kwargs = token_kwargs(bits, parser)
         for key in self.kwargs:
-            if key not in ('attr', 'templatename', 'text',):
+            if key not in ('key', 'templatename', 'text',):
                 raise TemplateSyntaxError(
                     "'table_sortlink' received invalid key: %s" % key)
 
     def render(self, context):
-        attr = self.kwargs.get('attr')
-        if attr is None:
+        key = self.kwargs.get('key')
+        if key is None:
             return ''
-        attr = attr.resolve(context)
+        key = key.resolve(context)
 
         text = self.kwargs.get('text')
         if text:
             text = text.resolve(context)
         else:
-            text = attr.replace('_', ' ').title()
+            text = key.replace('_', ' ').title()
 
         template_name = self.kwargs.get('templatename')
         if template_name:
@@ -79,15 +79,15 @@ class TableSortLinkNode(Node):
         if order_by:
             if isinstance(order_by, str):
                 order_by = (order_by,)
-            if sort_field in order_by:
+            if key in order_by:
                 ordering = 'asc'
-                sort_field = '-%s' % sort_field
-            elif '-%s' % sort_field in order_by:
+                key = '-%s' % key
+            elif '-%s' % key in order_by:
                 ordering = 'desc'
 
         order_by_field = context.get('order_by_field')
         request = context.get('request')
-        url = '?%s=%s' % (order_by_field, sort_field)
+        url = '?%s=%s' % (order_by_field, key)
         params = request.GET.copy()
         if order_by_field in params:
             del params[order_by_field]

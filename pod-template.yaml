@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: python
+    image: fkrull/multi-python:bionic
+    command:
+    - cat
+    tty: true
