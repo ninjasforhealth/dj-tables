@@ -13,16 +13,20 @@ pipeline {
   }
   stages {
     stage('Checkout') {
-      checkout scm
+      steps {
+        checkout scm
+      }
     }
-    container('python') {
-      stage('Test') {
-        steps {
+    stage('Test') {
+      steps {
+        container('python') {
           sh 'tox'
         }
       }
-      stage('Publish') {
-        steps {
+    }
+    stage('Publish') {
+      steps {
+        container('python') {
           sh 'flit publish'
         }
       }
