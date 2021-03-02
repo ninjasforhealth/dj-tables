@@ -5,7 +5,7 @@ pipeline {
     }
   }
   environment {
-    FLIT_USERNAME = '@token'
+    FLIT_USERNAME = '__token__'
     FLIT_PASSWORD = credentials('pypi_access_token')
   }
   triggers {
